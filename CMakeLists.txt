@@ -5,4 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Procedural main.cpp
         src/utils/Math_toolkit.hpp
-        src/utils/Math_toolkit.cpp)
+        src/utils/Math_toolkit.cpp
+        src/noise/noise.hpp
+        src/noise/perlin.hpp
+        src/noise/simplex.hpp
+        src/terrain.hpp
+        src/utils/save.hpp
+        )
+
+target_include_directories(Procedural PRIVATE ${CMAKE_SOURCE_DIR}/src)
