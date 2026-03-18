@@ -12,12 +12,29 @@ class Math_toolkit {
 public:
     Math_toolkit() = default;
     ~Math_toolkit() = default;
-    static double smooth_step(double edge_0, double edge_1, double x);
-    static double smooth_integral(double x,double max);
-    static double near_identity_abs(double x, double offset);
-    static double raised_inverted_cosi(double x);
-    static double linear_identity(double x);
-    static double curved_identity(double x);
+    static double smooth_step(double edge_0, double edge_1, double x){
+        double t = std::clamp((x - edge_0) / (edge_1 - edge_0), 0.0, 1.0);
+        return t * t * (3.0 - 2.0 * t);
+    }
+    static double smooth_integral(double x,double max){
+        if(x > max)
+            return x- max / 2.0;
+        return x*x*x*(1-0.5*x/max)/max/max;
+    }
+    static double near_identity_abs(double x, double offset){
+        return sqrt(x*x + offset*offset);
+    }
+    static double raised_inverted_cosi(double x) {
+        return (4/9)* std::pow(x,6)-(17/9)* std::pow(x,4),+(22/9)* std::pow(x,2);
+    }
+
+    static double linear_identity(double x) {
+        return std::pow(std::abs(x),1);
+    }
+
+    static double curved_identity(double x) {
+        return std::pow(std::abs(x),0.5);
+    }
     static double dot(double x1, double y1, double z1, double x2, double y2, double z2){
         return x1 * x2 + y1 * y2 + z1 * z2;
     }
