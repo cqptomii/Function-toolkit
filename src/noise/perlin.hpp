@@ -54,9 +54,13 @@ class PerlinNoise : public Noise
         }
         
         double noise(double x, double y, double z) const override{
-            int X = (int)floor(x) & 255;
-            int Y = (int)floor(y) & 255;
-            int Z = (int)floor(z) & 255;
+            const int xi = static_cast<int>(std::floor(x));
+            const int yi = static_cast<int>(std::floor(y));
+            const int zi = static_cast<int>(std::floor(z));
+
+            const int X = xi & 255;
+            const int Y = yi & 255;
+            const int Z = zi & 255;
 
             
             // Get the hash coordinates of the 8 cube corners
@@ -67,9 +71,9 @@ class PerlinNoise : public Noise
             int BA = p[B] + Z;
             int BB = p[B + 1] + Z;
 
-            x -= X;
-            y -= Y;
-            z -= Z;
+            const double xf = x - static_cast<double>(xi);
+            const double yf = y - static_cast<double>(yi);
+            const double zf = z - static_cast<double>(zi);
 
             // Get the gradient vectors for the corners
             Gradient gAA = GRADIENTS[p[AA] % 12];
@@ -83,20 +87,20 @@ class PerlinNoise : public Noise
             Gradient gBB1 = GRADIENTS[p[BB + 1] % 12];
             
             // Compute the dot product between the gradient vectors and the distance vectors
-            double dotAA  = Math_toolkit::dot(gAA.x,  gAA.y,  gAA.z,  x,   y,   z);
-            double dotBA  = Math_toolkit::dot(gBA.x,  gBA.y,  gBA.z,  x-1, y,   z);
-            double dotAB  = Math_toolkit::dot(gAB.x,  gAB.y,  gAB.z,  x,   y-1, z);
-            double dotBB  = Math_toolkit::dot(gBB.x,  gBB.y,  gBB.z,  x-1, y-1, z);
+            double dotAA  = Math_toolkit::dot(gAA.x,  gAA.y,  gAA.z,  xf,   yf,   zf);
+            double dotBA  = Math_toolkit::dot(gBA.x,  gBA.y,  gBA.z,  xf-1, yf,   zf);
+            double dotAB  = Math_toolkit::dot(gAB.x,  gAB.y,  gAB.z,  xf,   yf-1, zf);
+            double dotBB  = Math_toolkit::dot(gBB.x,  gBB.y,  gBB.z,  xf-1, yf-1, zf);
 
-            double dotAA1 = Math_toolkit::dot(gAA1.x,  gAA1.y,  gAA1.z,  x,   y,   z-1);
-            double dotBA1 = Math_toolkit::dot(gBA1.x,  gBA1.y,  gBA1.z,  x-1, y,   z-1);
-            double dotAB1 = Math_toolkit::dot(gAB1.x,  gAB1.y,  gAB1.z,  x,   y-1, z-1);
-            double dotBB1 = Math_toolkit::dot(gBB1.x,  gBB1.y,  gBB1.z,  x-1, y-1, z-1);
+            double dotAA1 = Math_toolkit::dot(gAA1.x,  gAA1.y,  gAA1.z,  xf,   yf,   zf-1);
+            double dotBA1 = Math_toolkit::dot(gBA1.x,  gBA1.y,  gBA1.z,  xf-1, yf,   zf-1);
+            double dotAB1 = Math_toolkit::dot(gAB1.x,  gAB1.y,  gAB1.z,  xf,   yf-1, zf-1);
+            double dotBB1 = Math_toolkit::dot(gBB1.x,  gBB1.y,  gBB1.z,  xf-1, yf-1, zf-1);
             
             // Compute the fade curves for x, y, z
-            double u = Math_toolkit::fade(x);
-            double v = Math_toolkit::fade(y);
-            double w = Math_toolkit::fade(z);
+            double u = Math_toolkit::fade(xf);
+            double v = Math_toolkit::fade(yf);
+            double w = Math_toolkit::fade(zf);
 
             // Interpolate the dot products using the fade curves
             double lerpX1 = Math_toolkit::lerp(dotAA, dotBA, u);
