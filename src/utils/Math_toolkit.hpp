@@ -27,11 +27,9 @@ public:
     static double raised_inverted_cosi(double x) {
         return (4/9)* std::pow(x,6)-(17/9)* std::pow(x,4),+(22/9)* std::pow(x,2);
     }
-
     static double linear_identity(double x) {
         return std::pow(std::abs(x),1);
     }
-
     static double curved_identity(double x) {
         return std::pow(std::abs(x),0.5);
     }
@@ -43,6 +41,19 @@ public:
     }
     static double lerp(double a, double b, double t){
         return a + t * (b - a);
+    }
+    static double spline(double t){
+        return t * t * (3 - 2 * t);
+    }
+    static double terrace(double t, double terrace_count){
+        double step = 1.0 / terrace_count;
+        double half_step = step / 2.0;
+        double mod = std::fmod(t, step);
+        if (mod < half_step) {
+            return t - mod;
+        } else {
+            return t - mod + step;
+        }
     }
 };
 
