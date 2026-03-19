@@ -39,7 +39,7 @@ class PerlinNoise : public Noise
     unsigned int p[512];
 
     public:
-        PerlinNoise(unsigned int seed){
+        PerlinNoise(unsigned int seed, unsigned int octaves = 6, double amplitude = 1.0, double frequency = 1.0, double persistence = 0.5, double lacunarity = 2.00) : Noise(octaves, amplitude, frequency, persistence, lacunarity) {
             this->seed = seed;
             for (int i = 0; i < 256; i++) {
                 p[i] = i;

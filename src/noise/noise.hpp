@@ -9,13 +9,21 @@ enum class NoiseType {
 };
 
 class Noise {
+
+    int octaves = 6;
+    double amplitude = 1.0;
+    double frequency = 1.0;
+    double persistence = 0.5;
+    double lacunarity = 2.00;
+
     public:
+        Noise( int octaves, double amplitude, double frequency, double persistence, double lacunarity ) : octaves(octaves), amplitude(amplitude), frequency(frequency), persistence(persistence), lacunarity(lacunarity) {}
         virtual ~Noise() {}
         // Noise function
         virtual double noise(double x, double y, double z) const = 0;
         
         // Fractal Brownian Motion (FBM) function
-        virtual double fbm(double x, double y, double z, int octaves = 8, double amplitude = 1.0, double frequency = 1.0, double persistence = 0.5, double lacunarity = 2.0) const {
+        virtual double fbm(double x, double y, double z) const {
                 double total = 0.0;
                 double max_value = 0.0;
                 double amp = amplitude;
